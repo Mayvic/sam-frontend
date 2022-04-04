@@ -1,0 +1,74 @@
+<div class="background">
+
+<div class="background2">
+
+    <img mat-card-image id="logoBig" src="../assets/images/logoSAM.png" alt="SAM">
+
+
+    <form [formGroup]="signInForm" >
+
+        <!-- Email -->
+        <mat-form-field class="form">
+            <mat-label>Email Institucional</mat-label>
+            <input id="email"
+                   matInput
+                   [formControlName]="'email'">
+                <mat-error *ngIf="signInForm.get('email').hasError('required')">
+                    Preencha o campo
+                </mat-error>
+                <mat-error *ngIf="signInForm.get('email').hasError('email')">
+                    Email Inválido
+                </mat-error>    
+        </mat-form-field>
+
+        <!-- Senha  -->
+        <mat-form-field class="form"> 
+            <mat-label>Senha</mat-label>
+            <input id="password"
+                   matInput
+                   type="password"
+                   [formControlName]="'password'"
+                   (keydown.enter)="signIn()"
+                   #passwordField>
+                <mat-error *ngIf="signInForm.get('password').hasError('required')">
+                    Preencha o campo
+                </mat-error>
+
+            <button mat-icon-button
+                    class="icon"
+                    (click)="passwordField.type === 'password' ? passwordField.type = 'text' : passwordField.type = 'password'"
+                    tabindex="-1"
+                    matSuffix>
+                <mat-icon *ngIf="passwordField.type === 'password'"
+                          >visibility</mat-icon>
+                <mat-icon *ngIf="passwordField.type === 'text'"
+                          >visibility_off</mat-icon>
+            </button>
+        </mat-form-field>
+
+        
+
+        <!-- Botão -->
+        <button class="primary-button"
+                mat-flat-button
+                type="button"
+                [disabled]="!signInForm.valid"
+                (click)="signIn()">
+
+                Entrar
+                
+            <mat-progress-spinner *ngIf="signInForm.disabled"
+                                  [diameter]="24"
+                                  [mode]="'indeterminate'"></mat-progress-spinner>
+        </button>
+
+
+      
+        
+
+    </form>
+
+    
+</div>
+
+</div>

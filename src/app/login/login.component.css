@@ -1,0 +1,12 @@
+#logoBig {
+    width: 80%;
+    height: auto;
+    margin-top: 25%;
+    margin-left: 10%;
+}
+
+.form {
+    display: block;
+    width: 80%;
+    margin: 40px auto;
+}

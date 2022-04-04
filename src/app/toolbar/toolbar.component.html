@@ -1,0 +1,15 @@
+<mat-toolbar id="toolbar">
+
+    <mat-toolbar-row id="row">
+        <img mat-card-image id="logo" src="../assets/images/logoSAM.png" alt="SAM">
+
+      <button mat-icon-button  id="button" [matMenuTriggerFor]="menuT">
+        <mat-icon>menu</mat-icon>
+    </button>
+    <mat-menu #menuT="matMenu">
+        <button mat-menu-item>Matérias</button>
+        <button mat-menu-item>Avaliações</button>
+        <button mat-menu-item>Relatórios</button>
+    </mat-menu>
+    </mat-toolbar-row>
+</mat-toolbar>
