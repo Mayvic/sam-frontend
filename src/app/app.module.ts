@@ -21,15 +21,15 @@ import { MatInputModule } from '@angular/material/input';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AppRoutingModule,
     MatToolbarModule,
-    HttpClientModule,
     MatIconModule,
     MatMenuModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
   ],
   providers: [MatIconRegistry,],
   bootstrap: [AppComponent]
