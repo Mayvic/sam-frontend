@@ -1,0 +1,65 @@
+
+<div class="background">
+    
+    <div class="background2">
+        <app-toolbar></app-toolbar>
+
+        <h1> Avaliação de Matéria </h1>
+
+        <mat-label class="titulo"> Perguntas sobre a Matéria</mat-label>
+        
+        <div *ngFor="let element of materiaForm.controls; let i = index" class="perguntas" [formGroup]="materiaForm">
+            
+            <app-custom-radio
+             [textosOpt]="perguntasMateria[i].textosOpt"
+             [titulo]="perguntasMateria[i].titulo"
+             [naoSeAplica]="perguntasMateria[i].naoSeAplica"
+             [radioForm]="element"
+            ></app-custom-radio>
+        </div>
+
+        <mat-label class="titulo"> Perguntas sobre o Professor</mat-label>
+        <div *ngFor="let pergunta of perguntasProfessor" class="perguntas">
+            <app-custom-radio
+             [textosOpt]="pergunta.textosOpt"
+             [titulo]="pergunta.titulo"
+             [naoSeAplica]="pergunta.naoSeAplica"
+             [radioForm]="radioForm"
+            ></app-custom-radio>
+        </div>
+
+        <mat-label class="titulo"> Perguntas sobre Você</mat-label>
+        <div *ngFor="let pergunta of perguntasAluno" class="perguntas">
+            <app-custom-radio
+             [textosOpt]="pergunta.textosOpt"
+             [titulo]="pergunta.titulo"
+             [naoSeAplica]="pergunta.naoSeAplica"
+             [radioForm]="radioForm"
+            ></app-custom-radio>
+        </div>
+        <mat-label class="titulo"> Comentários</mat-label>
+        <div class="perguntas">
+            <textarea matInput
+                cdkTextareaAutosize
+                #autosize="cdkTextareaAutosize"
+                cdkAutosizeMinRows="1"
+                cdkAutosizeMaxRows="5">
+            </textarea>
+        </div>
+
+        <button class="primary-button"
+                mat-flat-button
+                type="button"
+                [disabled]="!avaliacaoForm.valid"
+                (click)="criarAvaliacao()">
+
+                Enviar
+                
+            <!-- <mat-progress-spinner *ngIf="signInForm.disabled"
+                                  [diameter]="24"
+                                  [mode]="'indeterminate'"></mat-progress-spinner> -->
+        </button>
+
+
+    </div>
+</div>

@@ -1,0 +1,9 @@
+.perguntas{
+    padding: 5px 5px 10px 10px;
+    justify-content: center;
+}
+
+.titulo{
+    font-weight: bold;
+    padding: 5px 10px 10px 10px !important;
+}

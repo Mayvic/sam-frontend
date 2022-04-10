@@ -1,0 +1,9 @@
+<mat-label> {{ titulo }} </mat-label>
+<mat-radio-group class="radio" [formControl]="radioForm">
+    <mat-radio-button *ngIf="naoSeAplica" value="0">Não se aplica</mat-radio-button>
+    <mat-radio-button value="1">{{ textos[0] }}</mat-radio-button>
+    <mat-radio-button value="2">{{ textos[1] }}</mat-radio-button>
+    <mat-radio-button value="3">{{ textos[2] }}</mat-radio-button>
+    <mat-radio-button value="4">{{ textos[3] }}</mat-radio-button>
+    <mat-radio-button value="5">{{ textos[4] }}</mat-radio-button>
+</mat-radio-group>

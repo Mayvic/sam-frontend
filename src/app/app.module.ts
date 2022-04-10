@@ -13,11 +13,16 @@ import { LoginComponent } from './login/login.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { AvaliacaoComponent } from './avaliacao/avaliacao.component';
+import {MatRadioModule} from '@angular/material/radio';
+import { CustomRadioComponent } from './custom-radio/custom-radio.component';
 @NgModule({
   declarations: [
     AppComponent,
     ToolbarComponent,
-    LoginComponent
+    LoginComponent,
+    AvaliacaoComponent,
+    CustomRadioComponent
   ],
   imports: [
     BrowserModule,
@@ -30,6 +35,7 @@ import { MatInputModule } from '@angular/material/input';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatRadioModule,
   ],
   providers: [MatIconRegistry,],
   bootstrap: [AppComponent]
