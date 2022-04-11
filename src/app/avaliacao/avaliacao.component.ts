@@ -1,6 +1,7 @@
 import { AppService } from './../app.service';
 import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -21,6 +22,7 @@ export class AvaliacaoComponent implements OnInit {
   constructor(
     private _service: AppService,
     private _formBuilder: FormBuilder,
+    private _router: Router,
   ) { }
   
   ngOnInit(): void {
@@ -42,14 +44,13 @@ export class AvaliacaoComponent implements OnInit {
     return { titulo, label, textosOpt, naoSeAplica }
   }
   public criarAvaliacao(){
-    console.log("form", this.avaliacaoForm)
     if(!this.avaliacaoForm.valid) this.avaliacaoForm.markAllAsTouched();
     else{
-      console.log("criando..")
       this._service.criarAvaliacao(this.avaliacaoForm.getRawValue())
       .subscribe(
         response => {
         if(response)alert('Avaliação criada com sucesso');
+        this._router.navigate(['relatorio']);
 
       },err => {
         alert("error");
@@ -144,7 +145,7 @@ export class AvaliacaoComponent implements OnInit {
        conhecimento: [ avaliacao && avaliacao.conhecimento ? avaliacao.conhecimento : null, { validators: [Validators.required] }],
      }),
 
-      comentarios: [ avaliacao && avaliacao.comentarios ? avaliacao.comentarios : null, { validators: [Validators.required] }],
+      comentarios: [ avaliacao && avaliacao.comentarios ? avaliacao.comentarios : null],
    });
 
     return new Observable<FormGroup>(observer => observer.next(form));

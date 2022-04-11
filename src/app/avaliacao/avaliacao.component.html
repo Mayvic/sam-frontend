@@ -73,14 +73,15 @@
             </mat-error>
             <hr>
         </div>
-        
+
         <mat-label class="titulo"> Comentários</mat-label>
         <div class="perguntas">
             <textarea matInput
                 cdkTextareaAutosize
                 #autosize="cdkTextareaAutosize"
                 cdkAutosizeMinRows="5"
-                cdkAutosizeMaxRows="10">
+                cdkAutosizeMaxRows="10"
+                [formControl]="avaliacaoForm.controls['comentarios']">
             </textarea>
         </div>
 
