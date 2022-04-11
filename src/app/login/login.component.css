@@ -10,3 +10,10 @@
     width: 80%;
     margin: 40px auto;
 }
+
+.background {
+    height: 100% !important;   
+}
+.background2 {
+    padding-bottom: 0px !important;
+}

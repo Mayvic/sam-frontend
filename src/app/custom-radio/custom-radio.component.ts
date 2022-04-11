@@ -23,9 +23,6 @@ export class CustomRadioComponent implements OnInit {
 
   ngOnInit(): void {
     if(this.textosOpt) this.textos = this.textosOpt;
-
-    console.log("formRadio", this.radioForm);
-    
   }
 
 }

@@ -19,9 +19,6 @@ textarea{
     border-style: solid !important ;
     border-color: rgb(118, 118, 118) !important ;
 }
-mat-error{
-    font-size: 15px;
-}
 hr {
     width: 40%;
 }
@@ -32,6 +29,14 @@ hr {
     margin: 20px;
     padding: 10px;
 }
+
+.opcoes{
+    display: block;
+    padding-left: 20px;
+    padding-bottom: 3px;
+    font-size: 18px;
+}
+
 
 
 

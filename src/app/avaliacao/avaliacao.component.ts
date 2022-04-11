@@ -1,3 +1,4 @@
+import { AppService } from './../app.service';
 import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -12,23 +13,68 @@ export class AvaliacaoComponent implements OnInit {
   public perguntasProfessor = [];
   public perguntasAluno = [];
 
-  public materiaForm: FormGroup;
-  public professorForm: FormGroup;
-  public alunoForm: FormGroup;
+  public materias = [];
+  public materiaSelecionada;
 
-  avaliacaoForm: FormGroup;
+  public avaliacaoForm: FormGroup;
   
   constructor(
+    private _service: AppService,
     private _formBuilder: FormBuilder,
   ) { }
   
   ngOnInit(): void {
 
-      this.avaliacaoForm = this._initForm(null);
-      console.log("form", this.avaliacaoForm)
-      console.log("form2", this.avaliacaoForm.get('materia'))
-      console.log("materia form", this.materiaForm.controls)
+     this._initForm(null).subscribe(resultado => {
+      this.avaliacaoForm = resultado;
+      });
 
+    this._iniciaPerguntasMateria();
+    this._iniciaPerguntasProfessor();
+    this._iniciaPerguntasAluno();
+
+    this._getMaterias();
+    
+    
+    }
+
+  private _criarPergunta(titulo: string, label: string, textosOpt: string[] = null, naoSeAplica: boolean = false ){
+    return { titulo, label, textosOpt, naoSeAplica }
+  }
+  public criarAvaliacao(){
+    console.log("form", this.avaliacaoForm)
+    if(!this.avaliacaoForm.valid) this.avaliacaoForm.markAllAsTouched();
+    else{
+      console.log("criando..")
+      this._service.criarAvaliacao(this.avaliacaoForm.getRawValue())
+      .subscribe(
+        response => {
+        if(response)alert('Avaliação criada com sucesso');
+
+      },err => {
+        alert("error");
+        console.log("error", err);
+      });
+
+    }
+  }
+
+  public selecionaMateria(data: any){
+    this.materiaSelecionada = data;
+  }
+
+  private _getMaterias(){
+    this._service.getMateriasNaoAvaliadas()
+    .subscribe(
+    response => {
+      this.materias = response;
+    },err => {
+        alert("error");
+        console.log("error", err);
+    });
+  }
+
+  private _iniciaPerguntasMateria(){
     //PERGUNTAS MATERIAS
     this.perguntasMateria.push(this._criarPergunta("A materia foi apresentada com clareza?","clareza"));
     this.perguntasMateria.push(this._criarPergunta("A materia é relevante para sua formação?","relevancia"));
@@ -37,82 +83,71 @@ export class AvaliacaoComponent implements OnInit {
     this.perguntasMateria.push(this._criarPergunta("O material recomendado foi bom?","material"));
     this.perguntasMateria.push(this._criarPergunta("O laboratório foi bem utilizado?","lab", null, true));
     this.perguntasMateria.push(this._criarPergunta("A dificuldade da matéria estava nivelada com a turma?","dificuldade"));
-
-    // //PERGUNTAS PROFESSOR
-    // this.perguntasProfessor.push(this._criarPergunta("O professor domina o conteúdo da matéria?"));
-    // this.perguntasProfessor.push(this._criarPergunta("O professor se expressa de forma clara?"));
-    // this.perguntasProfessor.push(this._criarPergunta("A apresentação em sala do conteúdo foi adequada? (slide, quadro e etc)?"));
-    // this.perguntasProfessor.push(this._criarPergunta("As avaliações produzidas pelo professor foram compatíveis com o apresentado na matéria?"));
-    // this.perguntasProfessor.push(this._criarPergunta("O professor esteve disponível para dúvidas? (em sala, emails e etc)"));
-    // this.perguntasProfessor.push(this._criarPergunta("O professor foi frequente e pontual?"));
-    // this.perguntasProfessor.push(this._criarPergunta("Faria alguma outra matéria com o professor ou o indicaria para outros alunos?"));
-
-
-    // //PERGUNTAS ALUNO
-    // this.perguntasAluno.push(this._criarPergunta("Quantas vezes cursou a matéria?", ["1", "2", "3", "4", "5+"]));
-    // this.perguntasAluno.push(this._criarPergunta("Participava e estava presente nas aulas?"));
-    // this.perguntasAluno.push(this._criarPergunta("Teve entendimento do conteúdo?"));
-    // this.perguntasAluno.push(this._criarPergunta("Esforçou-se durante a matéria?"));
-    // this.perguntasAluno.push(this._criarPergunta("Os pre-requisitos da matéria são justos e suficientes?"));
-    // this.perguntasAluno.push(this._criarPergunta("Faria outra matéria da mesma aréa desta?"));
-    // this.perguntasAluno.push(this._criarPergunta("Adquiriu conhecimento durante a disciplina?"));
-
-    
   }
 
-  private _criarPergunta(titulo: string, label: string, textosOpt: string[] = null, naoSeAplica: boolean = false ){
-    return { titulo, label, textosOpt, naoSeAplica }
-  }
-  public criarAvaliacao(){
-    console.log("formulario criado", this.avaliacaoForm)
+  private _iniciaPerguntasProfessor(){
+    //PERGUNTAS PROFESSOR
+    this.perguntasProfessor.push(this._criarPergunta("O professor domina o conteúdo da matéria?","dominio"));
+    this.perguntasProfessor.push(this._criarPergunta("O professor se expressa de forma clara?","didatica" ));
+    this.perguntasProfessor.push(this._criarPergunta("A apresentação em sala do conteúdo foi adequada? (slide, quadro e etc)?","apresentacao"));
+    this.perguntasProfessor.push(this._criarPergunta("As avaliações produzidas pelo professor foram compatíveis com o apresentado na matéria?","avaliacoes"));
+    this.perguntasProfessor.push(this._criarPergunta("O professor esteve disponível para dúvidas? (em sala, emails e etc)","disponibilidade"));
+    this.perguntasProfessor.push(this._criarPergunta("O professor foi frequente e pontual?","assiduidade"));
+    this.perguntasProfessor.push(this._criarPergunta("Faria alguma outra matéria com o professor ou o indicaria para outros alunos?","indicaria"));
+
   }
 
-  private _initForm(avaliacao: any): FormGroup {
+  private _iniciaPerguntasAluno(){
+    //PERGUNTAS ALUNO
+    this.perguntasAluno.push(this._criarPergunta("Quantas vezes cursou a matéria?","primeiraVez", ["1", "2", "3", "4", "5+"]));
+    this.perguntasAluno.push(this._criarPergunta("Participava e estava presente nas aulas?","frequencia"));
+    this.perguntasAluno.push(this._criarPergunta("Teve entendimento do conteúdo?","entendimento"));
+    this.perguntasAluno.push(this._criarPergunta("Esforçou-se durante a matéria?","esforco"));
+    this.perguntasAluno.push(this._criarPergunta("Os pre-requisitos da matéria são justos e suficientes?","preReq"));
+    this.perguntasAluno.push(this._criarPergunta("Faria outra matéria da mesma aréa desta?","area"));
+    this.perguntasAluno.push(this._criarPergunta("Adquiriu conhecimento durante a disciplina?","conhecimento"));
+  
+  }
+
+  private _initForm(avaliacao: any): Observable<FormGroup> {
     let form = this._formBuilder.group({
      
-      alunoId: [{ value: (avaliacao && avaliacao.alunoId ? avaliacao.alunoId : null)}, Validators.required],
-      materiaId: [{ value: (avaliacao && avaliacao.materiaId ? avaliacao.materiaId : null)}, Validators.required],
-      materia: this.getMateriaForm(avaliacao),
+      materiaId: [ avaliacao && avaliacao.materiaId ? avaliacao.materiaId : null, { validators: [Validators.required] }],
+      
+      materia: this._formBuilder.group({
+        clareza: [ avaliacao && avaliacao.clareza ? avaliacao.clareza : null, { validators: [Validators.required] }],
+        relevancia: [ avaliacao && avaliacao.relevancia ? avaliacao.relevancia : null, { validators: [Validators.required] }],
+        ementa: [ avaliacao && avaliacao.ementa ? avaliacao.ementa : null, { validators: [Validators.required] }],
+        distribuicao: [ avaliacao && avaliacao.distribuicao ? avaliacao.distribuicao : null, { validators: [Validators.required] }],
+        material: [ avaliacao && avaliacao.material ? avaliacao.material : null, { validators: [Validators.required] }],
+        lab: [ avaliacao && avaliacao.lab ? avaliacao.lab : null, { validators: [Validators.required] }],
+        dificuldade: [ avaliacao && avaliacao.dificuldade ? avaliacao.dificuldade : null, { validators: [Validators.required] }],
+     }),
 
      professor: this._formBuilder.group({
-       dominio: [{ value: (avaliacao && avaliacao.dominio ? avaliacao.dominio : null)}, Validators.required],
-       didatica: [{ value: (avaliacao && avaliacao.didatica ? avaliacao.didatica : null)}, Validators.required],
-       apresentacao: [{ value: (avaliacao && avaliacao.apresentacao ? avaliacao.apresentacao : null)}, Validators.required],
-       avaliacoes: [{ value: (avaliacao && avaliacao.avaliacoes ? avaliacao.avaliacoes : null)}, Validators.required],
-       disponibilidade: [{ value: (avaliacao && avaliacao.disponibilidade ? avaliacao.disponibilidade : null)}, Validators.required],
-       assiduidade: [{ value: (avaliacao && avaliacao.assiduidade ? avaliacao.assiduidade : null)}, Validators.required],
-       indicaria: [{ value: (avaliacao && avaliacao.indicaria ? avaliacao.indicaria : null)}, Validators.required],
+       dominio: [ avaliacao && avaliacao.dominio ? avaliacao.dominio : null, { validators: [Validators.required] }],
+       didatica: [ avaliacao && avaliacao.didatica ? avaliacao.didatica : null, { validators: [Validators.required] }],
+       apresentacao: [ avaliacao && avaliacao.apresentacao ? avaliacao.apresentacao : null, { validators: [Validators.required] }],
+       avaliacoes: [ avaliacao && avaliacao.avaliacoes ? avaliacao.avaliacoes : null, { validators: [Validators.required] }],
+       disponibilidade: [ avaliacao && avaliacao.disponibilidade ? avaliacao.disponibilidade : null, { validators: [Validators.required] }],
+       assiduidade: [ avaliacao && avaliacao.assiduidade ? avaliacao.assiduidade : null, { validators: [Validators.required] }],
+       indicaria: [ avaliacao && avaliacao.indicaria ? avaliacao.indicaria : null, { validators: [Validators.required] }],
      }),
   
      aluno: this._formBuilder.group({
-       primeiraVez: [{ value: (avaliacao && avaliacao.primeiraVez ? avaliacao.primeiraVez : null)}, Validators.required],
-       frequencia: [{ value: (avaliacao && avaliacao.frequencia ? avaliacao.frequencia : null)}, Validators.required],
-       entendimento: [{ value: (avaliacao && avaliacao.entendimento ? avaliacao.entendimento : null)}, Validators.required],
-       esforco: [{ value: (avaliacao && avaliacao.esforco ? avaliacao.esforco : null)}, Validators.required],
-       preReq: [{ value: (avaliacao && avaliacao.preReq ? avaliacao.preReq : null)}, Validators.required],
-       area: [{ value: (avaliacao && avaliacao.area ? avaliacao.area : null)}, Validators.required],
-       conhecimento: [{ value: (avaliacao && avaliacao.conhecimento ? avaliacao.conhecimento : null)}, Validators.required],
+       primeiraVez: [ avaliacao && avaliacao.primeiraVez ? avaliacao.primeiraVez : null, { validators: [Validators.required] }],
+       frequencia: [ avaliacao && avaliacao.frequencia ? avaliacao.frequencia : null, { validators: [Validators.required] }],
+       entendimento: [ avaliacao && avaliacao.entendimento ? avaliacao.entendimento : null, { validators: [Validators.required] }],
+       esforco: [ avaliacao && avaliacao.esforco ? avaliacao.esforco : null, { validators: [Validators.required] }],
+       preReq: [ avaliacao && avaliacao.preReq ? avaliacao.preReq : null, { validators: [Validators.required] }],
+       area: [ avaliacao && avaliacao.area ? avaliacao.area : null, { validators: [Validators.required] }],
+       conhecimento: [ avaliacao && avaliacao.conhecimento ? avaliacao.conhecimento : null, { validators: [Validators.required] }],
      }),
 
-      comentarios: [{ value: (avaliacao && avaliacao.comentarios ? avaliacao.comentarios : null)}, Validators.required],
+      comentarios: [ avaliacao && avaliacao.comentarios ? avaliacao.comentarios : null, { validators: [Validators.required] }],
    });
 
-    return form;
-  }
-
-  private getMateriaForm(avaliacao: any){
-    let form = this._formBuilder.group({
-      clareza: [{ value: (avaliacao && avaliacao.clareza ? avaliacao.clareza : null)}, Validators.required],
-      relevancia: [{ value: (avaliacao && avaliacao.relevancia ? avaliacao.relevancia : null)}, Validators.required],
-      ementa: [{ value: (avaliacao && avaliacao.ementa ? avaliacao.ementa : null)}, Validators.required],
-      distribuicao: [{ value: (avaliacao && avaliacao.distribuicao ? avaliacao.distribuicao : null)}, Validators.required],
-      material: [{ value: (avaliacao && avaliacao.material ? avaliacao.material : null)}, Validators.required],
-      lab: [{ value: (avaliacao && avaliacao.lab ? avaliacao.lab : null)}, Validators.required],
-      dificuldade: [{ value: (avaliacao && avaliacao.dificuldade ? avaliacao.dificuldade : null)}, Validators.required],
-   });
-
-   this.materiaForm = form as FormGroup;
-   return form;
+    return new Observable<FormGroup>(observer => observer.next(form));
   }
 
 }

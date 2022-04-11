@@ -18,4 +18,29 @@ export class AppService {
         return this.http.post(`${this.apiURL}/login`, body);
 
     }
+
+    criarAvaliacao(data: any): Observable<any>{
+        let body = data;
+        let token = localStorage.getItem('token');
+        // let token = user.token.token;
+
+        return this.http.post(`${this.apiURL}/evaluation/create`, body, {headers:{authorization: `Bearer ${token}`}});
+    }
+
+    getMateriasNaoAvaliadas(): Observable<any>{
+        
+        let token = localStorage.getItem('token');
+        return this.http.get(`${this.apiURL}/materias/nao_avaliadas`, {headers:{authorization: `Bearer ${token}`}});
+    }
+
+    getMaterias(): Observable<any>{
+        
+        let token = localStorage.getItem('token');
+        return this.http.get(`${this.apiURL}/materias`, {headers:{authorization: `Bearer ${token}`}});
+    }
+
+    getRelatorioMateira(id: number): Observable<any>{
+        let token = localStorage.getItem('token');
+        return this.http.get(`${this.apiURL}/report/${id}`, {headers:{authorization: `Bearer ${token}`}});
+    }
 }

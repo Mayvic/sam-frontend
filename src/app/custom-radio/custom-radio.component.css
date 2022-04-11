@@ -4,6 +4,14 @@
     padding-bottom: 3px;
 }
 
+.radio {
+    margin-bottom: 10px ;
+}
+
+::ng-deep .mat-radio-label-content {
+    font-size: 18px;
+}
+
 ::ng-deep .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
     background-color: #0044AB !important; /*click effect color change*/
 }
@@ -15,3 +23,4 @@
 ::ng-deep.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
    border-color:#0044AB!important; /*outer ring color change*/
 }
+

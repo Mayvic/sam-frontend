@@ -14,15 +14,18 @@ import { ReactiveFormsModule } from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { AvaliacaoComponent } from './avaliacao/avaliacao.component';
+import { RelatorioComponent } from './relatorio/relatorio.component';
 import {MatRadioModule} from '@angular/material/radio';
 import { CustomRadioComponent } from './custom-radio/custom-radio.component';
+import {MatSelectModule} from '@angular/material/select';
 @NgModule({
   declarations: [
     AppComponent,
     ToolbarComponent,
     LoginComponent,
     AvaliacaoComponent,
-    CustomRadioComponent
+    CustomRadioComponent,
+    RelatorioComponent
   ],
   imports: [
     BrowserModule,
@@ -36,6 +39,7 @@ import { CustomRadioComponent } from './custom-radio/custom-radio.component';
     MatFormFieldModule,
     MatInputModule,
     MatRadioModule,
+    MatSelectModule,
   ],
   providers: [MatIconRegistry,],
   bootstrap: [AppComponent]

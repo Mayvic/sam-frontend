@@ -1,0 +1,83 @@
+<div class="background">
+
+    <div class="background2">
+        <app-toolbar></app-toolbar>
+
+        <h1> Relatório de Matéria </h1>
+
+        <mat-form-field class="selecao">
+            <mat-label class="titulo">Matéria</mat-label>
+            <mat-select [formControl]="relatorioForm.controls['materiaId']">
+                <mat-option *ngFor="let materia of materias" [value]="materia.id" (click)="selecionaMateria(materia)">
+                    {{ materia.nome }} </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div *ngIf="materiaSelecionada" id="materia">
+            <mat-label class="titulo"> {{ materiaSelecionada.nome }}</mat-label>
+            <span class="perguntas">
+                Código: {{materiaSelecionada.codigo}}
+            </span>
+            <span class="perguntas">
+                Descrição: {{materiaSelecionada.descricao}}
+            </span>
+            <span class="perguntas">
+                Periodo: {{materiaSelecionada.periodo}}
+            </span>
+            <span class="perguntas">
+                Professor: {{materiaSelecionada.professor.user.name}}
+            </span>
+        </div>
+
+        <div *ngIf="materiaSelecionada">
+
+            <mat-label class="titulo"> Perguntas sobre a Matéria</mat-label>
+
+            <div *ngFor="let pergunta of perguntasMateria">
+                <mat-label class="perguntas"> {{ pergunta.titulo }} </mat-label>
+                <span *ngIf="(pergunta.label == 'lab')" class="opcoes">
+                    Não Aplicável: {{relatorioForm.controls['materia'].controls[pergunta.label].value[0]}}
+                </span>
+                <span *ngFor="let opcao of textosOpt; let i = index" class="opcoes">
+                    {{opcao}}: {{relatorioForm.controls['materia'].controls[pergunta.label].value[i+1]}}
+                </span>
+                <hr>
+            </div>
+
+            <mat-label class="titulo"> Perguntas sobre o Professor</mat-label>
+            <div *ngFor="let pergunta of perguntasProfessor" class="perguntas">
+                <mat-label class="perguntas"> {{ pergunta.titulo }} </mat-label>
+                <span *ngFor="let opcao of textosOpt; let i = index" class="opcoes">
+                    {{opcao}}: {{relatorioForm.controls['professor'].controls[pergunta.label].value[i+1]}}
+                </span>
+                <hr>
+            </div>
+
+            <mat-label class="titulo"> Perguntas sobre Você</mat-label>
+            <div *ngFor="let pergunta of perguntasAluno" class="perguntas">
+                <mat-label class="perguntas"> {{ pergunta.titulo }} </mat-label>
+                <div *ngIf="(pergunta.label == 'primeiraVez')">
+                    <span *ngFor="let opcao of pergunta.textosOpt; let i = index" class="opcoes">
+                        {{opcao}}: {{relatorioForm.controls['aluno'].controls[pergunta.label].value[i+1]}}
+                    </span>
+                </div>
+                <div *ngIf="!(pergunta.label == 'primeiraVez')">
+                    <span *ngFor="let opcao of textosOpt; let i = index" class="opcoes">
+                        {{opcao}}: {{relatorioForm.controls['aluno'].controls[pergunta.label].value[i+1]}}
+                    </span>
+
+                </div>
+                <hr>
+            </div>
+
+            <mat-label class="titulo"> Comentários</mat-label>
+            <div class="perguntas">
+                <span *ngFor="let comentario of relatorioForm.controls['comentarios'].controls" class="opcoes">
+                    {{comentario.value}}
+                </span>
+            </div>
+        </div>
+
+
+    </div>
+</div>

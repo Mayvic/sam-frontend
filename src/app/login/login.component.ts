@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AppService } from "../app.service";
 
 @Component({
@@ -15,6 +16,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private _service: AppService,
     private _formBuilder: FormBuilder,
+    private _router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -27,9 +29,10 @@ export class LoginComponent implements OnInit {
   signIn(): void {
     this._service.login(this.signInForm.getRawValue()).subscribe(
       response => {
-      
-      console.log("response", response);
-      alert("logooou");
+
+        localStorage.setItem('token', response.user.token.token);
+
+        this._router.navigate(['avaliacao']);
     },
     err => {
       if (err.status == 400){

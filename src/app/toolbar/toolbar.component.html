@@ -7,9 +7,9 @@
         <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menuT="matMenu">
-        <button mat-menu-item>Matérias</button>
-        <button mat-menu-item>Avaliações</button>
-        <button mat-menu-item>Relatórios</button>
+        <!-- <button mat-menu-item (click)="goToMateria()">Matérias</button> -->
+        <button mat-menu-item (click)="goToAvaliacao()">Avaliações</button>
+        <button mat-menu-item (click)="goToRelatorio()">Relatórios</button>
     </mat-menu>
     </mat-toolbar-row>
 </mat-toolbar>
