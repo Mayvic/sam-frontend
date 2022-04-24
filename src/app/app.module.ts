@@ -25,7 +25,7 @@ import {MatSelectModule} from '@angular/material/select';
     LoginComponent,
     AvaliacaoComponent,
     CustomRadioComponent,
-    RelatorioComponent
+    RelatorioComponent,
   ],
   imports: [
     BrowserModule,

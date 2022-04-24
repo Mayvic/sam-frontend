@@ -13,11 +13,15 @@ export class AvaliacaoComponent implements OnInit {
   public perguntasMateria = [];
   public perguntasProfessor = [];
   public perguntasAluno = [];
+  public anos = [];
+  public periodos = [0,1,2,3,4,5];
+
 
   public materias = [];
   public materiaSelecionada;
 
   public avaliacaoForm: FormGroup;
+  public periodoForm: FormGroup;
   
   constructor(
     private _service: AppService,
@@ -29,13 +33,23 @@ export class AvaliacaoComponent implements OnInit {
 
      this._initForm(null).subscribe(resultado => {
       this.avaliacaoForm = resultado;
-      });
+    });
+
+    
+    this._getAnos();
+
+    this.periodoForm = this._formBuilder.group({
+    
+      ano: [ this.anos[0], { validators: [Validators.required] }],
+      periodo: [ this.periodos[2] , { validators: [Validators.required] }],
+    });  
 
     this._iniciaPerguntasMateria();
     this._iniciaPerguntasProfessor();
     this._iniciaPerguntasAluno();
 
     this._getMaterias();
+
     
     
     }
@@ -43,6 +57,7 @@ export class AvaliacaoComponent implements OnInit {
   private _criarPergunta(titulo: string, label: string, textosOpt: string[] = null, naoSeAplica: boolean = false ){
     return { titulo, label, textosOpt, naoSeAplica }
   }
+
   public criarAvaliacao(){
     if(!this.avaliacaoForm.valid) this.avaliacaoForm.markAllAsTouched();
     else{
@@ -53,7 +68,7 @@ export class AvaliacaoComponent implements OnInit {
         this._router.navigate(['relatorio']);
 
       },err => {
-        alert("error");
+        alert(`error ${err?.error?.error}`);
         console.log("error", err);
       });
 
@@ -65,14 +80,22 @@ export class AvaliacaoComponent implements OnInit {
   }
 
   private _getMaterias(){
-    this._service.getMateriasNaoAvaliadas()
+    this._service.getMaterias(this.periodoForm.getRawValue(), 0)
     .subscribe(
     response => {
       this.materias = response;
+      if(response.length == 0)  alert("Não há matérias nesse período");
     },err => {
         alert("error");
         console.log("error", err);
     });
+  }
+
+  private _getAnos(){
+    const date = new Date();
+    const ano = date.getFullYear();
+
+    this.anos = [(ano-1).toString(), ano.toString()];
   }
 
   private _iniciaPerguntasMateria(){
@@ -114,6 +137,7 @@ export class AvaliacaoComponent implements OnInit {
     let form = this._formBuilder.group({
      
       materiaId: [ avaliacao && avaliacao.materiaId ? avaliacao.materiaId : null, { validators: [Validators.required] }],
+      codigo: [ avaliacao && avaliacao.codigo ? avaliacao.codigo : null, { validators: [Validators.required] }],
       
       materia: this._formBuilder.group({
         clareza: [ avaliacao && avaliacao.clareza ? avaliacao.clareza : null, { validators: [Validators.required] }],
@@ -151,4 +175,12 @@ export class AvaliacaoComponent implements OnInit {
     return new Observable<FormGroup>(observer => observer.next(form));
   }
 
+  ngAfterViewInit() {
+    this.periodoForm.valueChanges.subscribe(value => {
+      this._getMaterias();
+      this.materiaSelecionada = null;
+      this.avaliacaoForm.controls['materiaId'].setValue(null);
+    });
+  }
 }
+

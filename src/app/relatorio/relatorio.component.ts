@@ -13,6 +13,9 @@ export class RelatorioComponent implements OnInit {
   public perguntasProfessor = [];
   public perguntasAluno = [];
 
+  public anos = [];
+  public periodos = [0,1,2,3,4,5];
+
   public materias = [];
   public materiaSelecionada;
   public textosOpt = [
@@ -24,6 +27,7 @@ export class RelatorioComponent implements OnInit {
   ]
 
   public relatorioForm: FormGroup;
+  public periodoForm: FormGroup;
   
   constructor(
     private _service: AppService,
@@ -36,6 +40,13 @@ export class RelatorioComponent implements OnInit {
      this.relatorioForm = resultado;
      });
 
+     this._getAnos();
+
+    this.periodoForm = this._formBuilder.group({
+    
+      ano: [ this.anos[0], { validators: [Validators.required] }],
+      periodo: [ this.periodos[2] , { validators: [Validators.required] }],
+    }); 
      
 
     this._iniciaPerguntasMateria();
@@ -76,14 +87,22 @@ export class RelatorioComponent implements OnInit {
   }
 
   private _getMaterias(){
-    this._service.getMaterias()
+    this._service.getMaterias(this.periodoForm.getRawValue())
     .subscribe(
     response => {
       this.materias = response;
+      if(response.length == 0)  alert("Não há matérias nesse período");
     },err => {
         alert("error");
         console.log("error", err);
     });
+  }
+
+  private _getAnos(){
+    const date = new Date();
+    const ano = date.getFullYear();
+
+    this.anos = [(ano-1).toString(), ano.toString()];
   }
 
   private _iniciaPerguntasMateria(){
@@ -126,6 +145,7 @@ export class RelatorioComponent implements OnInit {
     let form = this._formBuilder.group({
      
       materiaId: [ relatorio && relatorio.materiaId ? relatorio.materiaId : null, { validators: [Validators.required] }],
+      count: [ relatorio && relatorio.count ? relatorio.count : null, { validators: [Validators.required] }],
       
       materia: this._formBuilder.group({
         clareza: relatorio && relatorio.materia.clareza ? this.getCamposRelatorio(relatorio.materia.clareza) : null,
@@ -189,5 +209,12 @@ export class RelatorioComponent implements OnInit {
     });
     return this._formBuilder.array(comentarioForm);
 
+  }
+  ngAfterViewInit() {
+    this.periodoForm.valueChanges.subscribe(value => {
+      this._getMaterias();
+      this.materiaSelecionada = null;
+      this.relatorioForm.controls['materiaId'].setValue(null);
+    });
   }
 }

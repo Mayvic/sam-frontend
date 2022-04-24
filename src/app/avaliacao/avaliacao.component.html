@@ -6,7 +6,26 @@
 
         <h1> Avaliação de Matéria </h1>
 
-        <mat-form-field class="selecao">
+        
+        <div id="periodo">
+            <mat-form-field class="selecao">
+                <mat-label class="titulo">Ano</mat-label>
+                <mat-select [formControl]="periodoForm.controls['ano']">
+                  <mat-option *ngFor="let ano of anos" 
+                  [value]="ano"> {{ ano }} </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="selecao">
+                <mat-label class="titulo">Período</mat-label>
+                <mat-select [formControl]="periodoForm.controls['periodo']">
+                  <mat-option *ngFor="let periodo of periodos" 
+                  [value]="periodo"> {{ periodo }} </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        
+        <mat-form-field class="selecao" >
             <mat-label class="titulo">Matéria</mat-label>
             <mat-select [formControl]="avaliacaoForm.controls['materiaId']">
               <mat-option *ngFor="let materia of materias" 
@@ -14,7 +33,7 @@
               (click)="selecionaMateria(materia)"> {{ materia.nome }} </mat-option>
             </mat-select>
         </mat-form-field>
-        
+
         <div *ngIf="materiaSelecionada" id="materia">
             <mat-label class="titulo"> {{ materiaSelecionada.nome }}</mat-label>
             <span class="perguntas">
@@ -30,6 +49,11 @@
                 Professor: {{materiaSelecionada.professor.user.name}}
             </span>
         </div>
+
+        <mat-form-field class="selecao">
+            <mat-label>Código de entrada</mat-label>
+            <input [formControl]="avaliacaoForm.controls['codigo']" matInput />
+        </mat-form-field>
 
         <mat-label class="titulo"> Perguntas sobre a Matéria</mat-label>
         

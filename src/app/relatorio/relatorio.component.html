@@ -5,6 +5,24 @@
 
         <h1> Relatório de Matéria </h1>
 
+        <div id="periodo">
+            <mat-form-field class="selecao">
+                <mat-label class="titulo">Ano</mat-label>
+                <mat-select [formControl]="periodoForm.controls['ano']">
+                  <mat-option *ngFor="let ano of anos" 
+                  [value]="ano"> {{ ano }} </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="selecao">
+                <mat-label class="titulo">Período</mat-label>
+                <mat-select [formControl]="periodoForm.controls['periodo']">
+                  <mat-option *ngFor="let periodo of periodos" 
+                  [value]="periodo"> {{ periodo }} </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+
         <mat-form-field class="selecao">
             <mat-label class="titulo">Matéria</mat-label>
             <mat-select [formControl]="relatorioForm.controls['materiaId']">
@@ -27,9 +45,12 @@
             <span class="perguntas">
                 Professor: {{materiaSelecionada.professor.user.name}}
             </span>
+            <span class="perguntas">
+                Total de Avaliações: {{relatorioForm.controls['count'].value}}
+            </span>
         </div>
 
-        <div *ngIf="materiaSelecionada">
+        <div *ngIf="this.materias.length && materiaSelecionada">
 
             <mat-label class="titulo"> Perguntas sobre a Matéria</mat-label>
 

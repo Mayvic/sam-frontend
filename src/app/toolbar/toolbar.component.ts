@@ -1,3 +1,4 @@
+import { AppService } from './../app.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 @Component({
@@ -8,7 +9,9 @@ import { Router } from '@angular/router';
 export class ToolbarComponent implements OnInit {
 
   constructor(
-    private _router: Router,) { }
+    private _router: Router,
+    private _service: AppService,
+    ) { }
 
   ngOnInit(): void {
   }
@@ -22,6 +25,21 @@ export class ToolbarComponent implements OnInit {
     console.log("relatorio");
 
     this._router.navigate(['relatorio']);
+  }
+
+  public goToLogout(){
+    console.log("Sair");
+
+    this._service.logout()
+    .subscribe(
+      response => {
+      if(response)alert('Deslogado com sucesso');
+      this._router.navigate(['login']);
+
+    },err => {
+      alert("error");
+      console.log("error", err);
+    });
   }
 
 }

@@ -46,10 +46,19 @@ h1{
 }
 
 .selecao{
-    padding: 0px 10px 0px 10px;
+    padding: 0px 20px 0px 20px;
     justify-content: center;
     margin: 10px 0px 10px 0px;
-    
+
     display: block !important;
+}
+
+#periodo{
+    display: flex;
+    justify-content: space-between;
+    width: 38%;
+}
+#periodo .selecao{
+    width: 100%;
 }
 

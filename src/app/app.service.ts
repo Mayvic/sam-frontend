@@ -27,20 +27,41 @@ export class AppService {
         return this.http.post(`${this.apiURL}/evaluation/create`, body, {headers:{authorization: `Bearer ${token}`}});
     }
 
-    getMateriasNaoAvaliadas(): Observable<any>{
+    // getMateriasNaoAvaliadas(periodo: any): Observable<any>{
         
-        let token = localStorage.getItem('token');
-        return this.http.get(`${this.apiURL}/materias/nao_avaliadas`, {headers:{authorization: `Bearer ${token}`}});
-    }
+    //     let token = localStorage.getItem('token');
+    //     let params = {
+    //         avaliadas: 0,
+    //         periodo: `${periodo.ano}.${periodo.periodo}`
+    //     }
+    //     return this.http.get(`${this.apiURL}/materias`, {params,headers:{authorization: `Bearer ${token}`}});
+    // }
 
-    getMaterias(): Observable<any>{
+    getMaterias(periodo: any, isAvaliada?: number): Observable<any>{
+        let params;
+        if(isAvaliada == 0 || isAvaliada == 1){
+            params = {
+                avaliadas: isAvaliada,
+                periodo: `${periodo.ano}.${periodo.periodo}`
+            }
+
+        }else {
+            params = {
+                periodo: `${periodo.ano}.${periodo.periodo}`
+            }
+        }
         
         let token = localStorage.getItem('token');
-        return this.http.get(`${this.apiURL}/materias`, {headers:{authorization: `Bearer ${token}`}});
+        return this.http.get(`${this.apiURL}/materias`, {params,headers:{authorization: `Bearer ${token}`}});
     }
 
     getRelatorioMateira(id: number): Observable<any>{
         let token = localStorage.getItem('token');
         return this.http.get(`${this.apiURL}/report/${id}`, {headers:{authorization: `Bearer ${token}`}});
+    }
+
+    logout(){
+        let token = localStorage.getItem('token');
+        return this.http.post(`${this.apiURL}/logout`, null,{headers:{authorization: `Bearer ${token}`}});
     }
 }
