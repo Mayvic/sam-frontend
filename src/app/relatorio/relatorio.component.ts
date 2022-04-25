@@ -66,7 +66,7 @@ export class RelatorioComponent implements OnInit {
   public selecionaMateria(data: any){
     this.materiaSelecionada = data;
 
-    this._service.getRelatorioMateira(data.id)
+    this._service.getRelatorioMateria(data.id)
     .subscribe(
       response=>{
         this._initForm(response).subscribe(resultado => {
@@ -141,11 +141,10 @@ export class RelatorioComponent implements OnInit {
   }
 
   private _initForm(relatorio: any): Observable<FormGroup> {
-    console.log("RELATORIO", relatorio)
     let form = this._formBuilder.group({
      
       materiaId: [ relatorio && relatorio.materiaId ? relatorio.materiaId : null, { validators: [Validators.required] }],
-      count: [ relatorio && relatorio.count ? relatorio.count : null, { validators: [Validators.required] }],
+      count: [ relatorio && relatorio.count ? relatorio.count : 0, { validators: [Validators.required] }],
       
       materia: this._formBuilder.group({
         clareza: relatorio && relatorio.materia.clareza ? this.getCamposRelatorio(relatorio.materia.clareza) : null,

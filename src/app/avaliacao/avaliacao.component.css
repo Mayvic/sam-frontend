@@ -1,27 +1,4 @@
-.perguntas{
-    padding: 0px 10px 0px 10px;
-    justify-content: center;
-    margin: 10px 0px 10px 0px;
 
-    display: block;
-}
-
-.titulo{
-    font-weight: bold;
-    padding: 10px 10px 10px 10px !important;
-    font-size: 20px;
-}
-
-textarea{
-    text-align: left;
-    background-color: rgb(255, 255, 255) !important;
-    border-width: 1px !important ;
-    border-style: solid !important ;
-    border-color: rgb(118, 118, 118) !important ;
-}
-mat-error{
-    font-size: 15px;
-}
 hr {
     width: 40%;
 }

@@ -8,12 +8,30 @@ import { Router } from '@angular/router';
 })
 export class ToolbarComponent implements OnInit {
 
+  //0=aluno 1=professor 2=coordenador
+  public type = 0;
+
   constructor(
     private _router: Router,
     private _service: AppService,
     ) { }
 
   ngOnInit(): void {
+    this._getUsuario();
+  }
+
+  private _getUsuario() {
+
+    this._service.getUsuario()
+      .subscribe(
+        response => {
+          this.type = response.type;
+          console.log("type", this.type)
+        }, err => {
+          alert(`error ${err?.error?.error}`);
+          console.log("error", err);
+        });
+
   }
 
   public goToAvaliacao(){
@@ -25,6 +43,30 @@ export class ToolbarComponent implements OnInit {
     console.log("relatorio");
 
     this._router.navigate(['relatorio']);
+  }
+
+  public goToMateria(){
+    console.log("materia");
+
+    this._router.navigate(['materia'], {queryParams: {type: "create"} });
+  }
+
+  public goToEditarMateria(){
+    console.log("materia");
+
+    this._router.navigate(['materia'], {queryParams: {type: "edit"} });
+  }
+
+  public goToVisualizarMateria(){
+    console.log("materia");
+
+    this._router.navigate(['materia'], {queryParams: {type: "view"} });
+  }
+
+  public goToAluno(){
+    console.log("aluno");
+
+    this._router.navigate(['aluno']);
   }
 
   public goToLogout(){

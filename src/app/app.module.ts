@@ -18,6 +18,8 @@ import { RelatorioComponent } from './relatorio/relatorio.component';
 import {MatRadioModule} from '@angular/material/radio';
 import { CustomRadioComponent } from './custom-radio/custom-radio.component';
 import {MatSelectModule} from '@angular/material/select';
+import { AlunoComponent } from './aluno/aluno.component';
+import { MateriaComponent } from './materia/materia.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -26,6 +28,8 @@ import {MatSelectModule} from '@angular/material/select';
     AvaliacaoComponent,
     CustomRadioComponent,
     RelatorioComponent,
+    AlunoComponent,
+    MateriaComponent,
   ],
   imports: [
     BrowserModule,

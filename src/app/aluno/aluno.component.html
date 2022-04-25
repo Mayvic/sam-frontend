@@ -1,0 +1,90 @@
+<div class="background">
+
+    <div class="background2">
+        <!-- TOOLBAR -->
+        <app-toolbar *ngIf="isEdit"></app-toolbar>
+        <div *ngIf="!isEdit">
+            <mat-toolbar class="toolbar">
+                
+                <mat-toolbar-row class="row">
+                    <img mat-card-image class="logo" src="../assets/images/logoSAM.png" alt="SAM">
+                </mat-toolbar-row>
+            </mat-toolbar>
+        </div>
+
+        <!-- TITULO -->
+        <h1 *ngIf="isEdit"> Editar Aluno </h1>
+        <h1 *ngIf="!isEdit"> Cadastrar Aluno </h1>
+
+        <!-- NOME -->
+        <mat-form-field class="selecao">
+            <mat-label>Nome Completo</mat-label>
+            <input type="text" [formControl]="alunoForm.controls['name']" matInput />
+        </mat-form-field>
+
+        <!-- EMAIL -->
+        <mat-form-field class="selecao">
+            <mat-label>Email institucional</mat-label>
+            <input type='email' [formControl]="alunoForm.controls['email']" [disabled]="isEdit" matInput />
+        </mat-form-field>
+
+        <!-- MATRICULA -->
+        <mat-form-field class="selecao">
+            <mat-label>Matrícula</mat-label>
+            <input type="text" [formControl]="alunoForm.controls['document']" [disabled]="isEdit" matInput />
+        </mat-form-field>
+
+        <!-- SENHA  -->
+        <mat-form-field class="selecao">
+            <mat-label>Senha</mat-label>
+            <input matInput type="password" [formControl]="alunoForm.controls['password']" #campoSenha>
+            <mat-error *ngIf="alunoForm.get('password').hasError('required')">
+                Preencha o campo
+            </mat-error>
+            <mat-error *ngIf="alunoForm.get('password').hasError('incorrect')">
+                Senha difere do campo abaixo
+            </mat-error>
+
+            <button mat-icon-button class="icon"
+                (click)="campoSenha.type === 'password' ? campoSenha.type = 'text' : campoSenha.type = 'password'"
+                tabindex="-1" matSuffix>
+                <mat-icon *ngIf="campoSenha.type === 'password'">visibility</mat-icon>
+                <mat-icon *ngIf="campoSenha.type === 'text'">visibility_off</mat-icon>
+            </button>
+        </mat-form-field>
+
+        <!-- CONFIRMA SENHA  -->
+        <mat-form-field class="selecao">
+            <mat-label>Confirme a Senha</mat-label>
+            <input matInput type="password" 
+            [formControl]="alunoForm.controls['confirmPassword']" 
+            (keydown.enter)="(isEdit) ?editarAluno() :criarAluno()"
+            #campoConfirmaSenha>
+            <mat-error *ngIf="alunoForm.controls['confirmPassword'].hasError('required')">
+                Preencha o campo
+            </mat-error>
+            <mat-error *ngIf="alunoForm.controls['confirmPassword'].hasError('incorrect')">
+                Senha difere do campo acima
+            </mat-error>
+
+            <button mat-icon-button class="icon"
+                (click)="campoConfirmaSenha.type === 'password' ? campoConfirmaSenha.type = 'text' : campoConfirmaSenha.type = 'password'"
+                tabindex="-1" matSuffix>
+                <mat-icon *ngIf="campoConfirmaSenha.type === 'password'">visibility</mat-icon>
+                <mat-icon *ngIf="campoConfirmaSenha.type === 'text'">visibility_off</mat-icon>
+            </button>
+        </mat-form-field>
+
+
+        <!-- CADASTRAR/SALVAR -->
+        <button *ngIf="isEdit" class="primary-button" mat-flat-button type="button" (click)="editarAluno()">
+            Salvar
+        </button>
+
+        <button *ngIf="!isEdit" class="primary-button" mat-flat-button type="button" (click)="criarAluno()">
+            Cadastrar
+        </button>
+
+
+    </div>
+</div>

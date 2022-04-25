@@ -1,17 +1,4 @@
-#toolbar {
-  background-color: #EDEDED;
-}
-
-#logo {
-  width: auto;
-  height: 50%;
-}
-
 #button {
   border: none;
 }
 
-#row {
-  display: flex;
-  justify-content: space-between;
-}

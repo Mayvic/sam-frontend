@@ -1,15 +1,18 @@
-<mat-toolbar id="toolbar">
+<mat-toolbar class="toolbar">
 
-    <mat-toolbar-row id="row">
-        <img mat-card-image id="logo" src="../assets/images/logoSAM.png" alt="SAM">
+    <mat-toolbar-row class="row">
+        <img mat-card-image class="logo" src="../assets/images/logoSAM.png" alt="SAM">
 
       <button mat-icon-button  id="button" [matMenuTriggerFor]="menuT">
         <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #menuT="matMenu">
-        <!-- <button mat-menu-item (click)="goToMateria()">Matérias</button> -->
-        <button mat-menu-item (click)="goToAvaliacao()">Avaliações</button>
-        <button mat-menu-item (click)="goToRelatorio()">Relatórios</button>
+        <button *ngIf="type === 0" mat-menu-item (click)="goToAvaliacao()">Avaliações</button>
+        <button *ngIf="type !== 0" mat-menu-item (click)="goToRelatorio()">Relatórios</button>
+        <button *ngIf="type === 2" mat-menu-item (click)="goToMateria()">Cadastrar Matérias</button>
+        <button *ngIf="type === 2" mat-menu-item (click)="goToEditarMateria()">Editar Matérias</button>
+        <button *ngIf="type !== 0" mat-menu-item (click)="goToVisualizarMateria()">Visualizar Matérias</button>
+        <button *ngIf="type === 0" mat-menu-item (click)="goToAluno()">Editar Perfil</button>
         <button mat-menu-item (click)="goToLogout()">Sair</button>
     </mat-menu>
     </mat-toolbar-row>

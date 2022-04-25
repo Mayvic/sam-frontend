@@ -31,7 +31,12 @@ export class LoginComponent implements OnInit {
 
         localStorage.setItem('token', response.user.token.token);
 
-        this._router.navigate(['avaliacao']);
+        switch(response.user.type){
+          case 0: this._router.navigate(['avaliacao']); break;
+          case 1: this._router.navigate(['relatorio']); break;
+          case 2: this._router.navigate(['materia'], {queryParams: {type: "view"} }); break;
+        }
+      
     },
     err => {
       if (err.status == 400){
