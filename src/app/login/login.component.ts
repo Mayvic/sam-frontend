@@ -33,14 +33,14 @@ export class LoginComponent implements OnInit {
 
         switch(response.user.type){
           case 0: this._router.navigate(['avaliacao']); break;
-          case 1: this._router.navigate(['relatorio']); break;
-          case 2: this._router.navigate(['materia'], {queryParams: {type: "view"} }); break;
+          case 1: 
+          case 2: 
+             this._router.navigate(['relatorio']); break;
         }
       
     },
     err => {
       if (err.status == 400){
-        console.log("Dados de login Inválidos");
         alert("Dados de login de Inválidos");
       }
       console.log("error", err);

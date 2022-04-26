@@ -20,6 +20,7 @@ import { CustomRadioComponent } from './custom-radio/custom-radio.component';
 import {MatSelectModule} from '@angular/material/select';
 import { AlunoComponent } from './aluno/aluno.component';
 import { MateriaComponent } from './materia/materia.component';
+import { ViewMateriaComponent } from './view-materia/view-materia.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,6 +31,7 @@ import { MateriaComponent } from './materia/materia.component';
     RelatorioComponent,
     AlunoComponent,
     MateriaComponent,
+    ViewMateriaComponent,
   ],
   imports: [
     BrowserModule,

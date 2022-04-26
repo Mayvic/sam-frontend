@@ -34,7 +34,6 @@ export class AlunoComponent implements OnInit {
     this._service.getAluno()
       .subscribe(
         response => {
-          console.log("response", response)
           this.aluno = response.user;
           this.isEdit = (this.aluno !== null);
           this._initForm(this.aluno).subscribe(resultado => {
@@ -47,10 +46,8 @@ export class AlunoComponent implements OnInit {
 
   }
   public criarAluno() {
-    console.log("form", this.alunoForm)
     if (!this.alunoForm.valid) this.alunoForm.markAllAsTouched();
     else {
-      console.log("cadastro");
       this._service.criarAluno(this.alunoForm.getRawValue())
         .subscribe(
           response => {

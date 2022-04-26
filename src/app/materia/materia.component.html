@@ -7,98 +7,85 @@
         <!-- TITULO -->
         <h1 *ngIf="typeView === 'create'"> Cadastrar Materia </h1>
         <h1 *ngIf="typeView === 'edit'"> Editar Materia </h1>
-        <h1 *ngIf="typeView === 'view'"> Visualizar Materia </h1>
 
-        <mat-form-field *ngIf="typeView !== 'create'" class="selecao">
+        <!-- SELECIONAR MATERIA -->
+        <mat-form-field *ngIf="typeView === 'edit'" class="selecao">
             <mat-label class="titulo">Matéria</mat-label>
             <mat-select [formControl]="materiaForm.controls['materiaId']">
                 <mat-option *ngFor="let materia of materias" [value]="materia.id"
-                    (click)="this.getUmaMateria(materia.id);"> {{ materia.nome }} </mat-option>
+                    (click)="getUmaMateria(materia.id);"> {{ materia.nome }} </mat-option>
             </mat-select>
         </mat-form-field>
 
-        <!-- NOME -->
-        <mat-form-field class="selecao">
-            <mat-label>Nome</mat-label>
-            <input type="text" [formControl]="materiaForm.controls['nome']" [disabled]="typeView === 'view'" matInput />
-        </mat-form-field>
+        <div *ngIf="isMateriaSelecionada">
 
-        <!-- CODIGO -->
-        <mat-form-field class="selecao">
-            <mat-label>Código</mat-label>
-            <input type="text" [formControl]="materiaForm.controls['codigo']" [disabled]="typeView === 'view'"
-                matInput />
-        </mat-form-field>
+            <!-- NOME -->
+            <mat-form-field *ngIf="typeView === 'create'" class="selecao">
+                <mat-label>Nome</mat-label>
+                <input type="text" [formControl]="materiaForm.controls['nome']"
+                    matInput />
+            </mat-form-field>
 
-        <!-- PERIODO -->
-        <div id="periodo">
-            <mat-form-field *ngIf="typeView !== 'view'" class="selecao">
-                <mat-label class="titulo">Ano</mat-label>
-                <mat-select [formControl]="periodoForm.controls['ano']" [disabled]="typeView === 'view'">
-                    <mat-option *ngFor="let ano of anos" [value]="ano"> {{ ano }} </mat-option>
+            <!-- CODIGO -->
+            <mat-form-field class="selecao">
+                <mat-label>Código</mat-label>
+                <input type="text" [formControl]="materiaForm.controls['codigo']"
+                    matInput />
+            </mat-form-field>
+
+            <!-- PERIODO -->
+            <div id="periodo">
+                <mat-form-field class="selecao">
+                    <mat-label class="titulo">Ano</mat-label>
+                    <mat-select [formControl]="periodoForm.controls['ano']">
+                        <mat-option *ngFor="let ano of anos" [value]="ano"> {{ ano }} </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="selecao">
+                    <mat-label class="titulo">Período</mat-label>
+                    <mat-select [formControl]="periodoForm.controls['periodo']">
+                        <mat-option *ngFor="let periodo of periodos" [value]="periodo"> {{ periodo }} </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+            </div>
+            
+
+            <!-- PROFESSOR -->
+            <mat-form-field class="selecao">
+                <mat-label class="titulo">Professor(a)</mat-label>
+                <mat-select [formControl]="materiaForm.controls['professorId']">
+                    <mat-option *ngFor="let professor of professores" [value]="professor.id"> {{ professor.user.name }}
+                    </mat-option>
                 </mat-select>
             </mat-form-field>
 
 
-            <mat-form-field *ngIf="typeView === 'view'" class="titulo">
-                <mat-label>Ano</mat-label>
-                <input matInput [formControl]="periodoForm.controls['ano']" type="text">
+            <!-- DESCRICAO -->
+            <mat-form-field class="selecao">
+                <mat-label>Descrição</mat-label>
+                <input type="text" [formControl]="materiaForm.controls['descricao']" matInput />
             </mat-form-field>
 
-            <mat-form-field *ngIf="typeView !== 'view'" class="selecao">
-                <mat-label class="titulo">Período</mat-label>
-                <mat-select [formControl]="periodoForm.controls['periodo']" [disabled]="typeView === 'view'">
-                    <mat-option *ngFor="let periodo of periodos" [value]="periodo"> {{ periodo }} </mat-option>
-                </mat-select>
-            </mat-form-field>
+            <!-- CODIGO ENTRADA -->
+            <div *ngIf="typeView === 'edit'" class="selecao">
+                <mat-label>Código Entrada</mat-label>
+                <input type="text" id="codigo_entrada"
+                 [formControl]="materiaForm.controls['codigo_entrada']" matInput />
+            </div>
 
-            <mat-form-field *ngIf="typeView === 'view'" class="titulo">
-                <mat-label>Período</mat-label>
-                <input matInput [formControl]="periodoForm.controls['periodo']" type="text">
-            </mat-form-field>
+
         </div>
-
-        <!-- PROFESSOR -->
-        <mat-form-field *ngIf="typeView !== 'view'" class="selecao">
-            <mat-label class="titulo">Professor(a)</mat-label>
-            <mat-select [formControl]="materiaForm.controls['professorId']" [disabled]="typeView === 'view'">
-                <mat-option *ngFor="let professor of professores" [value]="professor.id"> {{ professor.nome }}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-
-        <mat-form-field *ngIf="typeView === 'view'" class="titulo">
-            <mat-label>Professor(a)</mat-label>
-            <input matInput [formControl]="periodoForm.controls['professorName']" type="text">
-        </mat-form-field>
-
-
-        <!-- DESCRICAO -->
-        <mat-form-field class="selecao">
-            <mat-label>Descrição</mat-label>
-            <input type="text" [formControl]="materiaForm.controls['descricao']" matInput
-                [disabled]="typeView === 'view'" />
-        </mat-form-field>
-
-
-
-        <!-- CODIGO ENTRADA -->
-        <div *ngIf="typeView !== 'create'" class="selecao">
-            <mat-label>Código Entrada</mat-label>
-            <span id="codigo_entrada">{{this.materiaForm.controls['codigo_entrada'].value}}</span>
-        </div>
-
-
-
 
         <!-- CADASTRAR/SALVAR -->
         <button *ngIf="typeView === 'edit'" class="primary-button" mat-flat-button type="button"
-            (click)="editarAluno()">
+            (click)="editarMateria()">
             Salvar
         </button>
 
         <button *ngIf="typeView === 'create'" class="primary-button" mat-flat-button type="button"
-            (click)="criarAluno()">
+            (click)="criarMateria()">
             Cadastrar
         </button>
 

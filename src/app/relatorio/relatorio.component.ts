@@ -71,13 +71,11 @@ export class RelatorioComponent implements OnInit {
       response=>{
         this._initForm(response).subscribe(resultado => {
           this.relatorioForm = resultado;
-          console.log("selecionada", this.relatorioForm)
          });
         
     },err => {
       if (err.status == 400){
-        console.log("Dados de login Inválidos");
-        alert("Dados de login de Inválidos");
+        alert("Erro ao pegar o relatório");
       }
       console.log("error", err);
     })

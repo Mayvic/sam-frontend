@@ -71,8 +71,9 @@ export class AppService {
     }
     
     getMaterias(periodo?: any, isAvaliada?: number): Observable<any>{
-        let params;
-        if(isAvaliada == 0 || isAvaliada == 1){
+
+        let params = {};
+        if(isAvaliada === 0 || isAvaliada === 1){
             params = {
                 ...params,
                 avaliadas: isAvaliada,
@@ -99,6 +100,12 @@ export class AppService {
     getRelatorioMateria(id: number): Observable<any>{
         let token = localStorage.getItem('token');
         return this.http.get(`${this.apiURL}/report/${id}`, {headers:{authorization: `Bearer ${token}`}});
+    }
+
+    // PROFESSORES
+    getProfessores(): Observable<any>{
+        let token = localStorage.getItem('token');
+        return this.http.get(`${this.apiURL}/professor`, {headers:{authorization: `Bearer ${token}`}});
     }
 
     // USUARIO

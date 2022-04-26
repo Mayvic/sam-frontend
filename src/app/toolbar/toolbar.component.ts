@@ -26,7 +26,6 @@ export class ToolbarComponent implements OnInit {
       .subscribe(
         response => {
           this.type = response.type;
-          console.log("type", this.type)
         }, err => {
           alert(`error ${err?.error?.error}`);
           console.log("error", err);
@@ -35,43 +34,30 @@ export class ToolbarComponent implements OnInit {
   }
 
   public goToAvaliacao(){
-    console.log("avaliacao");
     this._router.navigate(['avaliacao']);
   }
 
   public goToRelatorio(){
-    console.log("relatorio");
-
     this._router.navigate(['relatorio']);
   }
 
   public goToMateria(){
-    console.log("materia");
-
     this._router.navigate(['materia'], {queryParams: {type: "create"} });
   }
 
   public goToEditarMateria(){
-    console.log("materia");
-
     this._router.navigate(['materia'], {queryParams: {type: "edit"} });
   }
 
   public goToVisualizarMateria(){
-    console.log("materia");
-
-    this._router.navigate(['materia'], {queryParams: {type: "view"} });
+    this._router.navigate(['materia/view']);
   }
 
   public goToAluno(){
-    console.log("aluno");
-
     this._router.navigate(['aluno']);
   }
 
   public goToLogout(){
-    console.log("Sair");
-
     this._service.logout()
     .subscribe(
       response => {

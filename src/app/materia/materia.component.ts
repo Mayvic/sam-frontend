@@ -11,12 +11,13 @@ import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms'
   styleUrls: ['./materia.component.css']
 })
 export class MateriaComponent implements OnInit {
-  public typeView = "view";
+  public typeView = "create";
 
   public professores = [];
   public anos = [];
   public periodos = [0,1,2,3,4,5];
   public materias = [];
+  public isMateriaSelecionada = false;
 
   public materiaForm: FormGroup;
   public periodoForm: FormGroup;
@@ -30,26 +31,18 @@ export class MateriaComponent implements OnInit {
 
   ngOnInit(): void {
     this._getTypeView();
+    this._getProfessores();
+    this._getAnos();
 
-    if(this.typeView !== "view") {
-      this._getProfessores();
-      
-      this._getAnos();
-    }
-    
-    if(this.typeView !== "create"){
-      this._getMaterias();
-    }else{
-      this._initForm(null).subscribe(resultado => {
-        this.materiaForm = resultado;
-      });
+    this._initForm(null).subscribe(resultado => {
+      this.materiaForm = resultado;
+    });
 
-      this.periodoForm = this._formBuilder.group({
-        ano: [this.anos[0], { validators: [Validators.required] }],
-        periodo: [this.periodos[2] , { validators: [Validators.required] }],
-      });  
-    }
+    this._initPeriodoForm().subscribe(resultado => {
+      this.periodoForm = resultado;
+    });
 
+    if(this.typeView === "edit") this._getMaterias();
    
   }
 
@@ -65,25 +58,22 @@ export class MateriaComponent implements OnInit {
     });
   }
 
-
-
   public getUmaMateria(id: string) {
 
     this._service.getUmaMateria(id)
       .subscribe(
         response => {
-          console.log("response", response)
-          this.materias = response;
-          this._initForm(this.materias).subscribe(resultado => {
+          this._initForm(response).subscribe(resultado => {
             this.materiaForm = resultado;
           });
 
-          let periodo = response.periodo.slice('.');
+          let periodo = response.periodo.split('.');
+          console.log("periodo", periodo);
 
-          this.periodoForm = this._formBuilder.group({
-            ano: [periodo[0], { validators: [Validators.required] }],
-            periodo: [periodo[1] , { validators: [Validators.required] }],
-          });  
+          this.periodoForm.controls['ano'].setValue(Number(periodo[0]));
+          this.periodoForm.controls['periodo'].setValue(Number(periodo[1]));
+          console.log("periodo2", this.periodoForm);
+          this.isMateriaSelecionada = true;  
 
         }, err => {
           alert(`error ${err?.error?.error}`);
@@ -100,26 +90,22 @@ export class MateriaComponent implements OnInit {
 
   private _getAnos(){
     const date = new Date();
-    const ano = date.getFullYear();
+    const ano = Number(date.getFullYear());
 
     for(let i=0; i < 5; i++){
       this.anos = [...this.anos,(ano+i).toString()];
     }
   }
 
-
   public criarMateria() {
-    console.log("form", this.materiaForm)
-    this.materiaForm.removeControl('id');
-    this.materiaForm.removeControl('professorName');
+    this.materiaForm.removeControl('materiaId');
     if (!this.materiaForm.valid) this.materiaForm.markAllAsTouched();
     else {
-      console.log("cadastro");
       this._service.criarMateria(this.materiaForm.getRawValue())
         .subscribe(
           response => {
             if (response) alert('Matéria criada com sucesso');
-            this._router.navigate(['materia'], {queryParams: {type: "view"} });
+            this._router.navigate(['materia/view']);
 
           }, err => {
             alert(`error ${err?.error?.error}`);
@@ -136,36 +122,16 @@ export class MateriaComponent implements OnInit {
         .subscribe(
           response => {
             if (response) alert('Matéria editada com sucesso');
-            this._router.navigate(['materia'], {queryParams: {type: "view"} });
-
+            this._router.navigate(['materia/view']);
           }, err => {
             alert(`error ${err?.error?.error}`);
             console.log("error", err);
           });
-
     }
   }
 
-
-  private _initForm(materia: any): Observable<FormGroup> {
-    let form = this._formBuilder.group({
-
-      id: [materia && materia.id ? materia.id : null, { validators: [Validators.required] }],
-      nome: [materia && materia.nome ? materia.nome : null, { validators: [Validators.required] }],
-      descricao: [materia && materia.descricao ? materia.descricao : null, { validators: [Validators.required] }],
-      codigo: [materia && materia.codigo ? materia.codigo : null, { validators: [Validators.required] }],
-      codigo_entrada: [materia && materia.codigo_entrada ? materia.codigo_entrada : null, { validators: [Validators.required] }],
-      periodo: [materia && materia.periodo ? materia.periodo : null, { validators: [Validators.required] }],
-      professorId: [materia && materia.professor.id ? materia.professor.id : null, { validators: [Validators.required] }],
-      professorName: [materia && materia.professor.user.name ? materia.professor.user.name : null],
-
-    });
-
-    return new Observable<FormGroup>(observer => observer.next(form));
-  }
-
   private _getProfessores(){
-    this._service.getMaterias(this.materiaForm.getRawValue(), 0)
+    this._service.getProfessores()
     .subscribe(
     response => {
       this.professores = response;
@@ -176,9 +142,30 @@ export class MateriaComponent implements OnInit {
     });
   }
 
-  ngAfterViewInit() {
+  private _initForm(materia: any): Observable<FormGroup> {
+    let form = this._formBuilder.group({
+      materiaId: [{value: materia && materia.id ? materia.id : null, disabled: this.typeView === 'create' }, { validators: [Validators.required] }],
+      nome: [{value: materia && materia.nome ? materia.nome : null}, { validators: [Validators.required] }],
+      codigo: [materia && materia.codigo ? materia.codigo : null, { validators: [Validators.required] }],
+      periodo: [materia && materia.periodo ? materia.periodo : null, { validators: [Validators.required] }],
+      professorId: [materia && materia.professor.id ? materia.professor.id : null, { validators: [Validators.required] }],
+      descricao: [materia && materia.descricao ? materia.descricao : null, { validators: [Validators.required] }],
+      codigo_entrada: [{value: materia && materia.codigo_entrada ? materia.codigo_entrada : null, disabled: true}, { validators: [Validators.required] }],
 
+    });
+
+    return new Observable<FormGroup>(observer => observer.next(form));
   }
+
+  private _initPeriodoForm(): Observable<FormGroup> {
+    let form = this._formBuilder.group({
+      ano: [this.anos[0], { validators: [Validators.required] }],
+      periodo: [this.periodos[2] , { validators: [Validators.required] }],
+    });  
+
+    return new Observable<FormGroup>(observer => observer.next(form));
+  }
+
 
 }
 

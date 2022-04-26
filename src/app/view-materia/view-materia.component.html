@@ -1,0 +1,63 @@
+<div class="background">
+
+    <div class="background2">
+        <!-- TOOLBAR -->
+        <app-toolbar></app-toolbar>
+
+        <!-- TITULO -->
+        <h1> Visualizar Materia </h1>
+
+        <mat-form-field class="selecao">
+            <mat-label class="titulo">Matéria</mat-label>
+            <mat-select [formControl]="materiaForm.controls['materiaId']">
+                <mat-option *ngFor="let materia of materias" [value]="materia.id"
+                    (click)="getUmaMateria(materia.id);"> {{ materia.nome }} </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div *ngIf="isMateriaSelecionada">
+
+            <!-- CODIGO -->
+            <mat-form-field class="selecao">
+                <mat-label>Código</mat-label>
+                <input type="text" [formControl]="materiaForm.controls['codigo']"
+                    matInput />
+            </mat-form-field>
+
+            <!-- PERIODO VIEW -->
+            <div id="periodo">
+                <mat-form-field class="selecao">
+                    <mat-label>Ano</mat-label>
+                    <input matInput [formControl]="periodoForm.controls['ano']" type="text">
+                </mat-form-field>
+                
+                <mat-form-field class="selecao">
+                    <mat-label>Período</mat-label>
+                    <input matInput [formControl]="periodoForm.controls['periodo']" type="text">
+                </mat-form-field>
+            </div>
+
+            <!-- PROFESSOR VIEW -->
+            <mat-form-field class="selecao">
+                <mat-label>Professor(a)</mat-label>
+                <input matInput [formControl]="materiaForm.controls['professorName']" type="text">
+            </mat-form-field>
+
+
+            <!-- DESCRICAO -->
+            <mat-form-field class="selecao">
+                <mat-label>Descrição</mat-label>
+                <input type="text" [formControl]="materiaForm.controls['descricao']" matInput />
+            </mat-form-field>
+
+            <!-- CODIGO ENTRADA -->
+            <div class="selecao">
+                <mat-label>Código Entrada</mat-label>
+                <input type="text" id="codigo_entrada"
+                 [formControl]="materiaForm.controls['codigo_entrada']" matInput />
+            </div>
+
+
+        </div>
+    </div>
+</div>
