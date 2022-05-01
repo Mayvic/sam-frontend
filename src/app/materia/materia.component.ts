@@ -1,8 +1,8 @@
 import { AppService } from './../app.service';
-import { debounceTime, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 
 @Component({
@@ -42,7 +42,11 @@ export class MateriaComponent implements OnInit {
       this.periodoForm = resultado;
     });
 
-    if(this.typeView === "edit") this._getMaterias();
+    if(this.typeView === "edit"){
+      this._getMaterias();
+    } else if (this.typeView === "create"){
+      this. isMateriaSelecionada = true;
+    }
    
   }
 
@@ -68,11 +72,9 @@ export class MateriaComponent implements OnInit {
           });
 
           let periodo = response.periodo.split('.');
-          console.log("periodo", periodo);
 
-          this.periodoForm.controls['ano'].setValue(Number(periodo[0]));
+          this.periodoForm.controls['ano'].setValue(periodo[0]);
           this.periodoForm.controls['periodo'].setValue(Number(periodo[1]));
-          console.log("periodo2", this.periodoForm);
           this.isMateriaSelecionada = true;  
 
         }, err => {
@@ -98,7 +100,9 @@ export class MateriaComponent implements OnInit {
   }
 
   public criarMateria() {
+    this._preparePeriodo();
     this.materiaForm.removeControl('materiaId');
+    this.materiaForm.removeControl('codigo_entrada');
     if (!this.materiaForm.valid) this.materiaForm.markAllAsTouched();
     else {
       this._service.criarMateria(this.materiaForm.getRawValue())
@@ -116,6 +120,7 @@ export class MateriaComponent implements OnInit {
   }
 
   public editarMateria() {
+    this._preparePeriodo();
     if (!this.materiaForm.valid) this.materiaForm.markAllAsTouched();
     else {
       this._service.editarMateria(this.materiaForm.getRawValue())
@@ -142,10 +147,14 @@ export class MateriaComponent implements OnInit {
     });
   }
 
+  private _preparePeriodo(){
+    this.materiaForm.controls["periodo"].setValue(`${this.periodoForm.get("ano").value}.${this.periodoForm.get("periodo").value}`)
+  }
+
   private _initForm(materia: any): Observable<FormGroup> {
     let form = this._formBuilder.group({
-      materiaId: [{value: materia && materia.id ? materia.id : null, disabled: this.typeView === 'create' }, { validators: [Validators.required] }],
-      nome: [{value: materia && materia.nome ? materia.nome : null}, { validators: [Validators.required] }],
+      materiaId: [{value: (materia && materia.id ? materia.id : null), disabled: this.typeView === 'create' }, { validators: [Validators.required] }],
+      nome: [ materia && materia.nome ? materia.nome : "", { validators: [Validators.required] }],
       codigo: [materia && materia.codigo ? materia.codigo : null, { validators: [Validators.required] }],
       periodo: [materia && materia.periodo ? materia.periodo : null, { validators: [Validators.required] }],
       professorId: [materia && materia.professor.id ? materia.professor.id : null, { validators: [Validators.required] }],
@@ -165,7 +174,6 @@ export class MateriaComponent implements OnInit {
 
     return new Observable<FormGroup>(observer => observer.next(form));
   }
-
 
 }
 

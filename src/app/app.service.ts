@@ -60,14 +60,14 @@ export class AppService {
         let body = data;
         let token = localStorage.getItem('token');
         
-        return this.http.post(`${this.apiURL}/meterias/create`, body, {headers:{authorization: `Bearer ${token}`}});
+        return this.http.post(`${this.apiURL}/materias`, body, {headers:{authorization: `Bearer ${token}`}});
     }
     
     editarMateria(data: any): Observable<any>{
         let body = data;
         let token = localStorage.getItem('token');
         
-        return this.http.put(`${this.apiURL}/materias`, body, {headers:{authorization: `Bearer ${token}`}});
+        return this.http.put(`${this.apiURL}/materias/${body.materiaId}`, body, {headers:{authorization: `Bearer ${token}`}});
     }
     
     getMaterias(periodo?: any, isAvaliada?: number): Observable<any>{

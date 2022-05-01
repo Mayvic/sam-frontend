@@ -1,5 +1,5 @@
 import { AppService } from './../app.service';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-toolbar',

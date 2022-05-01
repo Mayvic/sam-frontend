@@ -20,7 +20,7 @@
         <div *ngIf="isMateriaSelecionada">
 
             <!-- NOME -->
-            <mat-form-field *ngIf="typeView === 'create'" class="selecao">
+            <mat-form-field class="selecao">
                 <mat-label>Nome</mat-label>
                 <input type="text" [formControl]="materiaForm.controls['nome']"
                     matInput />
