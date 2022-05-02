@@ -23,6 +23,9 @@ export class AlunoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this._initForm(null).subscribe(resultado => {
+      this.alunoForm = resultado;
+    });
 
     this._getAluno();
     
